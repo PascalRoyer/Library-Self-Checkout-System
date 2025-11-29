@@ -10,6 +10,7 @@ CREATE TABLE Catalogue (
     EDITION VARCHAR(50),
     Date_parution INT,
     Nombre_pages INT
+    Disponiblite BOOLEAN DEFAULT TRUE 
 );
 
 # Inserer les livres de linventaire de la bibliotheque
