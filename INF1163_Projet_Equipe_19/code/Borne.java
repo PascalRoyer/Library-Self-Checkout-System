@@ -235,25 +235,24 @@ public class Borne{
     }
 
 
-    public void saisirExemplaire(int RFID){
+    public String saisirExemplaire(int RFID){
         Livre l = catalogue.get(RFID);
         if (this.session == null){
-            System.out.println("Erreur: Veuillez vous authentifier.");
-            return;
+            return "Erreur: Veuillez vous authentifier.";
         }
 
         if (l == null){
-            System.out.println("Exemplaire non trouvé.");
+            return "Exemplaire non trouvé.";
         }
         else if (l.getEstEmprunte())
         {
-            System.out.println("Le livre est déjà emprunté.");
+            return "Le livre est déjà emprunté.";
         }
-            else {
+        else {
             l.setEstEmprunte(true);
             this.session.ajouterLivre(l);
             // Do not update DB yet, wait for confirmation
-            System.out.println("Le livre est ajouté à l'emprunt.");
+            return "Le livre est ajouté à l'emprunt.";
         }
     }
 

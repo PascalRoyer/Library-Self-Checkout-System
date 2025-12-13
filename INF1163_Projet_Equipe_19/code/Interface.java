@@ -58,10 +58,6 @@ public Interface()
     add(scanBtn);
     scanBtn.setVisible(false);
 
-    finishBtn = new JButton("Terminer Saisie");
-    add(finishBtn);
-    finishBtn.setVisible(false);
-
     confirmBtn = new JButton("Confirmer Emprunt");
     add(confirmBtn);
     confirmBtn.setVisible(false);
@@ -70,13 +66,19 @@ public Interface()
     add(returnBtn);
     returnBtn.setVisible(false);
 
+    myLoansBtn = new JButton("Voir Mes Emprunts");
+    add(myLoansBtn);
+    myLoansBtn.setVisible(false);
+
     catalogueBtn = new JButton("Voir Catalogue");
     add(catalogueBtn);
     catalogueBtn.setVisible(false);
 
-    myLoansBtn = new JButton("Voir Mes Emprunts");
-    add(myLoansBtn);
-    myLoansBtn.setVisible(false);
+ 
+
+    finishBtn = new JButton("Terminer Saisie");
+    add(finishBtn);
+    finishBtn.setVisible(false);
 
     cancelBtn = new JButton("Annuler");
     add(cancelBtn);
@@ -128,11 +130,15 @@ private void Scan() {
     String rfidStr = rfidInput.getText();
     try {
         int rfid = Integer.parseInt(rfidStr);
-        borne.saisirExemplaire(rfid);
-        rfidInput.setText("");
-        updateDisplay();
+        String result = borne.saisirExemplaire(rfid);
+        if (result.startsWith("Erreur") || result.equals("Exemplaire non trouvé.") || result.equals("Le livre est déjà emprunté.")) {
+            JOptionPane.showMessageDialog(this, result, "Erreur", JOptionPane.ERROR_MESSAGE);
+        } else {
+            rfidInput.setText("");
+            updateDisplay();
+        }
     } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "RFID doit être un nombre.");
+        JOptionPane.showMessageDialog(this, "RFID doit être un nombre.", "Erreur", JOptionPane.ERROR_MESSAGE);
     }
 }
 
@@ -269,7 +275,7 @@ public static void main(String[] args)
 {
     Interface Interface = new Interface();
     Interface.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    Interface.setSize(850, 300);
+    Interface.setSize(1000, 600);
     Interface.setVisible(true);
 }//Fin de la méthode main
 }//Fin de la classe LabelFrame
