@@ -14,6 +14,7 @@ public class Interface extends JFrame
 {
 private JLabel clientIDLabel;
 private JLabel NIPLabel;
+private JLabel rfidLabel;
 private JTextField clientIDInput;
 private JTextField NIPInput;
 private JButton logInBtn;
@@ -30,7 +31,7 @@ private Borne borne;
 
 public Interface()
 {
-    super("Emprunter Livre");
+    super("gestion de borne de bibliothèque");
     setLayout(new FlowLayout());
 
     borne = new Borne();
@@ -50,11 +51,15 @@ public Interface()
     logInBtn = new JButton("Login");
     add(logInBtn);
 
+    rfidLabel = new JLabel("<html><i>Rentrer le RFID du livre:</i></html>");
+    add(rfidLabel);
+    rfidLabel.setVisible(false);
+
     rfidInput = new JTextField(10);
     add(rfidInput);
     rfidInput.setVisible(false);
 
-    scanBtn = new JButton("Scanner RFID");
+    scanBtn = new JButton("Emprunter livre");
     add(scanBtn);
     scanBtn.setVisible(false);
 
@@ -112,6 +117,7 @@ private void LogIn(){
         NIPLabel.setVisible(false);
         NIPInput.setVisible(false);
         logInBtn.setVisible(false);
+        rfidLabel.setVisible(true);
         rfidInput.setVisible(true);
         scanBtn.setVisible(true);
         finishBtn.setVisible(true);
@@ -143,11 +149,23 @@ private void Scan() {
 }
 
 private void Finish() {
-    borne.terminerSaisie();
-    updateDisplay();
-    scanBtn.setVisible(false);
-    finishBtn.setVisible(false);
-    confirmBtn.setVisible(true);
+    try {
+        // Modifier la visibilité des boutons EN PREMIER
+        scanBtn.setVisible(false);
+        finishBtn.setVisible(false);
+        confirmBtn.setVisible(true);
+        
+        // Puis appeler les méthodes
+        borne.terminerSaisie();
+        updateDisplay();
+        
+        // Force le rafraîchissement de l'interface
+        revalidate();
+        repaint();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Erreur: " + e.getMessage());
+        e.printStackTrace();
+    }
 }
 
 private void Confirm() {
@@ -259,6 +277,7 @@ private void resetInterface() {
     NIPLabel.setVisible(true);
     NIPInput.setVisible(true);
     logInBtn.setVisible(true);
+    rfidLabel.setVisible(false);
     rfidInput.setVisible(false);
     scanBtn.setVisible(false);
     finishBtn.setVisible(false);
